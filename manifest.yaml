@@ -1,0 +1,71 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: evite-micro-crypto
+  labels:
+    app: evite-micro-crypto
+    service: evite-micro-crypto
+spec:
+  ports:
+    - port: 9090
+      name: grpc
+  selector:
+    app: evite-micro-crypto
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: evite-micro-crypto
+  labels:
+    app: evite-micro-crypto
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: evite-micro-crypto
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: evite-micro-crypto
+        version: v1
+    spec:
+      containers:
+        - name: evite-micro-crypto
+          image: registry.gitlab.com/mernxl-evite/evite-micro-crypto:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MONGODB_USER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: evite-config
+                  key: MONGODB_USER_NAME
+            - name: CRYPTO_SYSTEM_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: evite-config
+                  key: CRYPTO_SYSTEM_SECRET
+            - name: MONGODB_USER_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: evite-config
+                  key: MONGODB_USER_PASS
+            - name: MONGODB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: evite-config
+                  key: MONGODB_URL
+
+            - name: SERVER_HOST
+              value: 0.0.0.0
+            - name: SERVER_PORT
+              value: "9090"
+            - name: NODE_ENV
+              value: production
+            - name: JWT_SECRET
+              value: wb0GVijnquSCyRy7tte5kv7XfyVol9CoJozcZcKcKEI=
+          ports:
+            - containerPort: 9090
+---

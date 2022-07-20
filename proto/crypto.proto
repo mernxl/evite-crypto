@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package crypto;
+
+message CreateOneSigningKeyInput {
+  optional string keyword = 1;
+}
+
+message CreateOneSigningKeyOutput {
+  string idHash = 1;
+}
+
+message CreateOneSignatureInput {
+  string signingKeyIdHash = 1;
+  string eviteId = 2;
+  optional string keyword = 3;
+}
+
+message CreateOneSignatureOutput {
+  string idHash = 1;
+}
+
+message VerifySignatureInput {
+  string signingKeyIdHash = 1;
+  string signatureIdHash = 2;
+  string eviteId = 3;
+  optional string keyword = 4;
+}
+
+message VerifySignatureOutput {
+  bool isValid = 1;
+}
+
+service Crypto {
+  rpc createOneSigningKey(CreateOneSigningKeyInput) returns (CreateOneSigningKeyOutput) {};
+  rpc createOneSignature(CreateOneSignatureInput) returns (CreateOneSignatureOutput) {};
+  rpc verifySignature(VerifySignatureInput) returns (VerifySignatureOutput) {};
+}
