@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: evite-micro-crypto
+  namespace: evite-micro
   labels:
     app: evite-micro-crypto
     service: evite-micro-crypto
@@ -17,6 +18,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: evite-micro-crypto
+  namespace: evite-micro
   labels:
     app: evite-micro-crypto
     version: v1
