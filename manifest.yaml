@@ -66,8 +66,6 @@ spec:
               value: "9090"
             - name: NODE_ENV
               value: production
-            - name: JWT_SECRET
-              value: wb0GVijnquSCyRy7tte5kv7XfyVol9CoJozcZcKcKEI=
           ports:
             - containerPort: 9090
 ---
