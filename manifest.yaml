@@ -37,18 +37,18 @@ spec:
       containers:
         - name: evite-micro-crypto
           image: registry.gitlab.com/mernxl-evite/evite-micro-crypto:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
+            - name: CRYPTO_SYSTEM_SECRET
+              valueFrom:
+                  configMapKeyRef:
+                    name: evite-config
+                    key: CRYPTO_SYSTEM_SECRET
             - name: MONGODB_USER_NAME
               valueFrom:
                 configMapKeyRef:
                   name: evite-config
                   key: MONGODB_USER_NAME
-            - name: CRYPTO_SYSTEM_SECRET
-              valueFrom:
-                configMapKeyRef:
-                  name: evite-config
-                  key: CRYPTO_SYSTEM_SECRET
             - name: MONGODB_USER_PASS
               valueFrom:
                 configMapKeyRef:
@@ -59,6 +59,31 @@ spec:
                 configMapKeyRef:
                   name: evite-config
                   key: MONGODB_URL
+            - name: MINIO_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: evite-config
+                  key: MINIO_ENDPOINT
+            - name: MINIO_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: evite-config
+                  key: MINIO_REGION
+            - name: MINIO_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: evite-config
+                  key: MINIO_PORT
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: evite-config
+                  key: MINIO_ACCESS_KEY
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: evite-config
+                  key: MINIO_SECRET_KEY
 
             - name: SERVER_HOST
               value: 0.0.0.0
@@ -66,6 +91,33 @@ spec:
               value: "9090"
             - name: NODE_ENV
               value: production
+            - name: GRPC_VERBOSITY
+              value: DEBUG
+            - name: GRPC_TRACE
+              value: all
+            - name: SMTP_USER_PASS
+              value: ""
+            - name: SMTP_USER_NAME
+              value: ""
           ports:
             - containerPort: 9090
 ---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: evite-micro-crypto
+  namespace: evite-micro
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: evite-micro-crypto
+  minReplicas: 2
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50

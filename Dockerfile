@@ -32,4 +32,4 @@ COPY --from=build /app/build ./build
 COPY app.ini ./
 COPY proto/ ./proto
 
-ENTRYPOINT [ "yarn", "run", "run" ]
+ENTRYPOINT [ "yarn", "run", "run:release" ]
