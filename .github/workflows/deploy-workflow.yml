@@ -15,7 +15,7 @@ on:
           - prod
 
 env:
-  APP_NAME: evite-auth
+  APP_NAME: evite-crypto
   PROJECT_NAME: evite
 
 jobs:
