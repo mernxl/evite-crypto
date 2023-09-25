@@ -44,6 +44,9 @@ const sdk = new NodeSDK({
   }),
   instrumentations: [
     getNodeAutoInstrumentations({
+      '@opentelemetry/instrumentation-grpc': {
+        ignoreGrpcMethods: ['/AWS.ALB/healthcheck'], // skip health check endpoints to avoid polluting data
+      },
       // only instrument fs if it is part of another trace
       '@opentelemetry/instrumentation-fs': {
         requireParentSpan: true,
