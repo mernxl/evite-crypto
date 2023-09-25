@@ -1,3 +1,5 @@
+import './config/instrumentation';
+
 import * as grpc from '@grpc/grpc-js';
 
 import { config } from './config';

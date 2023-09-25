@@ -7,6 +7,9 @@ export interface AppConfiguration {
   PORT: number;
   HOST: string;
 
+  NEW_RELIC_API_KEY: string;
+  NEW_RELIC_OTEL_ENDPOINT: string;
+
   MONGODB_USE_IN_MEMORY_DB?: boolean;
 
   CRYPTO: {
